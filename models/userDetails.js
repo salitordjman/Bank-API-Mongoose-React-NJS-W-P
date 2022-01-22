@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
-const Product = mongoose.model("Product", {
+const userDetails = mongoose.model("userDetails", {
   name: {
     type: String,
     default: "gfg",
   },
 });
 
-module.exports = Product;
+module.exports = userDetails;

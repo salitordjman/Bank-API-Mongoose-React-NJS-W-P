@@ -1,6 +1,6 @@
 const express = require("express");
 require("./db/mongoose");
-const Product = require("./models/products");
+const userDetails = require("./models/userDetails");
 
 //
 const cors = require("cors");
@@ -16,33 +16,37 @@ const publicPath = path.join(__dirname, "client/build");
 app.use(cors());
 app.use(express.static(publicPath));
 //
-
 app.use(express.json());
-
-// app.get("/api/users", (req, res) => {
-//   try {
-//     res.status(200).send({ userName: "Bob" });
-//   } catch (e) {
-//     res.status(400).send({ error: e.message });
-//   }
-// });
 
 app.get("/api/users", async (req, res) => {
   try {
-    const prod = await Product.find({});
-    res.status(200).send(prod);
+    const myUser = await userDetails.find({});
+    res.status(200).send(myUser);
   } catch (e) {
     res.status(400).send({ error: e.message });
   }
 });
+app.get("/api/users/:id", async (req, res) => {
+  const _id = req.params.id;
+  try {
+    const myUser = await userDetails.findById(_id);
+    if (!myUser) {
+      return res.status(404).send();
+    }
+
+    res.send(myUser);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
 
 app.post("/api/users", async (req, res) => {
-  const newProduct = new Product(req.body);
+  const newUser = new userDetails(req.body);
   try {
-    await newProduct.save();
-    res.status(201).send(newProduct);
+    await newUser.save();
+    res.status(201).send(newUser);
   } catch (e) {
-    res.status(400).send(e);
+    res.status(400).send(e.message);
   }
 });
 
