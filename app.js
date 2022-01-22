@@ -50,6 +50,26 @@ app.post("/api/users", async (req, res) => {
   }
 });
 
+app.patch("/api/users/deposit/:id", async (req, res) => {
+  try {
+    const _id = req.params.id;
+    const money = req.body.deposit;
+    if (typeof money === "number" && money > 0) {
+      const userDeposit = await userDetails.findById(_id);
+      if (!userDeposit) {
+        return res.status(404).send("Not found user");
+      }
+      userDeposit.cash += money;
+      userDeposit.save();
+      res.status(200).send(userDeposit);
+    } else {
+      res.status(401).send("Deposit must be a positive number");
+    }
+  } catch (e) {
+    res.status(400).send({ error: e.message });
+  }
+});
+
 //
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(publicPath, "index.html"));
