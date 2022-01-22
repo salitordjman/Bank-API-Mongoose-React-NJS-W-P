@@ -1,3 +1,3 @@
 module.exports = {
-  password: "123456Aaa",
+  password: "process.env.password",
 };
