@@ -168,6 +168,32 @@ app.patch("/api/users/transferring/:id", async (req, res) => {
   }
 });
 
+app.delete("/api/users/delete/:id", async (req, res) => {
+  try {
+    const userDel = await userDetails.findByIdAndDelete(req.params.id);
+
+    if (!userDel) {
+      return res.status(404).send("Not found user");
+    }
+
+    res.send("Delete success" + userDel);
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+app.delete("/api/users/delete", async (req, res) => {
+  try {
+    const deleteAll = await userDetails.deleteMany({});
+    if (!deleteAll) {
+      return res.status(404).send("Not found users");
+    }
+
+    res.send("Delete all users success");
+  } catch (e) {
+    res.status(500).send(e.message);
+  }
+});
+
 app.get("*", (req, res) => {
   res.sendFile(path.resolve(publicPath, "index.html"));
 });
