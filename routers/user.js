@@ -19,7 +19,7 @@ router.get("/api/users/:id", async (req, res) => {
       return res.status(404).send();
     }
 
-    res.send(myUser);
+    res.status(201).send(myUser);
   } catch (e) {
     res.status(500).send(e.message);
   }
